@@ -26,7 +26,7 @@ public class BoardEntity {
     private String author;
 
     @Builder
-    public BoardEntity(long boardId, String title, String content, String author){
+    public BoardEntity(long BOARDID, String title, String content, String author){
         this.BOARDID=BOARDID;
         this.title=title;
         this.content=content;

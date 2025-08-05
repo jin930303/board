@@ -3,7 +3,6 @@ package com.example.board.service;
 import com.example.board.entity.BoardEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BoardService {
 
