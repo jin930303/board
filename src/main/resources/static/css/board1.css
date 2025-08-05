@@ -1,0 +1,13 @@
+table {
+    text-align : center;
+    margin : auto;
+    border : 5px solid black;
+    width : 80%;
+}
+
+body{
+    left : 30%;
+    top : 30%;
+    padding 20% 30% 0 30% ;
+
+}
