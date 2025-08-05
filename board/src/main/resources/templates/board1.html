@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="~{top:: top}"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/css/board1.css}">
+<script th:src="@{js/board1.js}"></script>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<body>
+<a href="inputBoard" id="inputBoard">게시판 작성</a>
+<table>
+    <thead>
+<tr>
+    <th>번호</th><th>제목</th><th>작성자</th>
+</tr>
+    </thead>
+    <tbody>
+    <tr th:each="my:${list}">
+        <td th:text="${my.BOARDID}">
+        <td th:text="${my.title}">
+        <td th:text="${my.content}">
+        <td th:text="${my.author}">
+        <td><a th:href="@{updateBoard(id=${my.BOARDID})}">수정</a></td>
+        <td><a th:onclick="deleteBoard([[${my.BOARDID}]])">삭제</a></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="~{top:: top}"></div>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="boardSave" method="post">
+  <table>
+      <tr>
+          <th>제목</th>
+          <td><input type="text" name="title" id="title" required></td>
+      </tr>
+      <tr>
+          <th>내용</th>
+          <td><textarea rows="20" cols="20" name="content" id="content" required></textarea></td>
+      </tr>
+      <tr>
+          <th>작성자</th>
+          <td><input type="text" id="author" name="author" required></td>
+      </tr>
+      <tr>
+        <td> <input type="submit" value="입력"></td>
+      </tr>
+  </table>
+</form>
+</body>
+</html>
