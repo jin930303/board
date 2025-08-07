@@ -50,5 +50,11 @@ public class BoardController {
         return"updateBoardView";
     }
 
+    @PutMapping(value = "updateSave")
+    public String board5(@PathVariable long BOARDID, BoardEntity boardEntity)
+    {
+        boardService.updateById(BOARDID,boardEntity);
+        return "board1";
+    }
 
 }

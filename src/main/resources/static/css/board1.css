@@ -1,13 +1,13 @@
 table {
     text-align : center;
-    margin : auto;
-    border : 5px solid black;
+    margin : 10% 0 0 10%;
+    border : 0.5px solid #ddd;
     width : 80%;
-}
-
+    }
+th{
+    text-align : center;
+    border-bottom : 0.5px solid #ddd;
+    }
 body{
-    left : 30%;
     top : 30%;
-    padding 20% 30% 0 30% ;
-
-}
+    }
