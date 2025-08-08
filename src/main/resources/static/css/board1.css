@@ -11,3 +11,8 @@ th{
 body{
     top : 30%;
     }
+#inputBoard{
+    text-align : center;
+    margin-left :85%;
+    top : 20%;
+}

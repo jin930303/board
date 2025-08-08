@@ -14,5 +14,5 @@ public interface BoardService {
 
     void delete(long boardId);
 
-    void updateById(long boardid, BoardEntity boardEntity);
+    void updateById(BoardEntity boardEntity);
 }

@@ -39,8 +39,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void updateById(long boardid, BoardEntity boardEntity) {
-        repository.updateById(boardid,boardEntity);
+    public void updateById( BoardEntity boardEntity) {
+        repository.updateById(boardEntity.getBOARDID(),boardEntity.getContent(),boardEntity.getTitle());
     }
 
 
