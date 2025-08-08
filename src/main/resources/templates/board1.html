@@ -1,14 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:insert="~{top:: top}"></div>
 <link rel="stylesheet" type="text/css" th:href="@{/css/board1.css}">
-<script th:src="@{js/board1.js}"></script>
+
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <body>
+<script th:src="@{/js/board1.js}"></script>
 <a href="inputBoard" id="inputBoard">게시판 작성</a>
 <table>
     <thead>
 <tr>
-    <th>번호</th><th>제목</th><th>작성자</th>
+    <th>번호</th><th>제목</th><th>내용</th><th>작성자</th><th>수정/삭제</th>
 </tr>
     </thead>
     <tbody>
@@ -17,8 +18,8 @@
         <td th:text="${my.title}">
         <td th:text="${my.content}">
         <td th:text="${my.author}">
-        <td><a th:href="@{updateBoard(id=${my.BOARDID})}">수정</a></td>
-        <td><a th:onclick="deleteBoard([[${my.BOARDID}]])">삭제</a></td>
+        <td><a th:href="@{updateBoard(id=${my.BOARDID})}">수정</a>/<a href="#" th:onclick="deleteBoard([[${my.BOARDID}]])">삭제</a></td>
+        <td></td>
     </tr>
     </tbody>
 </table>
