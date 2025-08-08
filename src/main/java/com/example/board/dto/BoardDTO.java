@@ -9,14 +9,14 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class BoardDTO {
-    private long boardId;
+    private long BOARDID;
     private String title;
     private String content;
     private String author;
 
     public  BoardEntity boardEntity(){
         return BoardEntity.builder()
-            .boardId(boardId)
+            .BOARDID(BOARDID)
             .title(title)
             .content(content)
             .author(author)

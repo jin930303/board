@@ -17,6 +17,7 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+
     @GetMapping(value = "board1")
     public String board1(Model mo){
         List<BoardEntity> list = boardService.out();
@@ -50,5 +51,16 @@ public class BoardController {
         return"updateBoardView";
     }
 
+    @PostMapping(value = "updateSave")
+    public String board5(@RequestParam("boardid") Long boardid,@RequestParam("title") String title,
+                         @RequestParam("content") String content,BoardDTO dto)
+    {
+        dto.setBOARDID(boardid);
+        dto.setContent(content);
+        dto.setTitle(title);
+        BoardEntity entity = dto.boardEntity();
+        boardService.updateById(entity);
+        return "redirect:board1";
+    }
 
 }

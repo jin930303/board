@@ -11,4 +11,8 @@ public interface BoardService {
     List<BoardEntity> out();
 
     BoardEntity findout(long boardId);
+
+    void delete(long boardId);
+
+    void updateById(BoardEntity boardEntity);
 }

@@ -33,4 +33,15 @@ public class BoardServiceImpl implements BoardService{
     public BoardEntity findout(long boardId) {
         return repository.findById(boardId).orElse(null);
     }
+
+    @Override
+    public void delete(long boardId) {repository.deleteById(boardId);
+    }
+
+    @Override
+    public void updateById( BoardEntity boardEntity) {
+        repository.updateById(boardEntity.getBOARDID(),boardEntity.getContent(),boardEntity.getTitle());
+    }
+
+
 }
