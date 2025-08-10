@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import com.example.board.dto.Board2DTO;
 import com.example.board.dto.BoardDTO;
 import com.example.board.entity.BoardEntity;
 import com.example.board.service.BoardService;
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -63,4 +68,28 @@ public class BoardController {
         return "redirect:board1";
     }
 
+    @GetMapping(value = "board2")
+    public String board6(){
+
+
+        return "board2";
+    }
+
+    @GetMapping(value = "inputBoard2")
+    public String board7(){
+
+        return "inputBoard2";
+    }
+
+    @PostMapping(value = "boardSave2")
+    public String board8(@RequestParam("title") String title, @RequestParam("content") String content
+                        , @RequestParam("author") String author, Board2DTO dto2){
+        dto2.setAuthor(author);
+        dto2.setContent(content);
+        dto2.setTitle(title);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter fomat = DateTimeFormatter.ofPattern("MM-DD HH:mm:ss");
+
+        return "redirect:board2";
+    }
 }
