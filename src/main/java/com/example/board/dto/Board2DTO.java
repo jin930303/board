@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Timestamp;
+
 
 @Setter
 @Getter
@@ -14,7 +15,7 @@ public class Board2DTO {
     private long id;
     private String title;
     private String content;
-    private Date inputDate;
+    private Timestamp inputDate;
     private String author;
 
     public Board2Entity board2Entity(){

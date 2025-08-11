@@ -1,13 +1,13 @@
 package com.example.board.entity;
 
 import jakarta.persistence.*;
-import jdk.jshell.Snippet;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Setter
@@ -28,14 +28,14 @@ public class Board2Entity {
     @Column
     private String content;
 
-    @Column
-    private Date inputDate;
+    @Column(name = "inputdate")
+    private Timestamp inputDate;
 
     @Column
     private String author;
 
     @Builder
-    public Board2Entity (long id,String title,String content,Date inputDate,String author){
+    public Board2Entity (long id, String title, String content, Timestamp inputDate, String author){
         this.author=author;
         this.id=id;
         this.title=title;

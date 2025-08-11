@@ -2,25 +2,32 @@ package com.example.board.controller;
 
 import com.example.board.dto.Board2DTO;
 import com.example.board.dto.BoardDTO;
+import com.example.board.entity.Board2Entity;
 import com.example.board.entity.BoardEntity;
+import com.example.board.service.Board2Service;
 import com.example.board.service.BoardService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Controller
 public class BoardController {
 
     @Autowired
     BoardService boardService;
+
+    @Autowired
+    Board2Service board2Service;
 
 
     @GetMapping(value = "board1")
@@ -69,9 +76,9 @@ public class BoardController {
     }
 
     @GetMapping(value = "board2")
-    public String board6(){
-
-
+    public String board6(Model mo){
+        List<Board2Entity> list = board2Service.out();
+        mo.addAttribute("list",list);
         return "board2";
     }
 
@@ -87,8 +94,12 @@ public class BoardController {
         dto2.setAuthor(author);
         dto2.setContent(content);
         dto2.setTitle(title);
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter fomat = DateTimeFormatter.ofPattern("MM-DD HH:mm:ss");
+        LocalDateTime ld = LocalDateTime.now();
+        Timestamp tp = Timestamp.valueOf(ld);
+        dto2.setInputDate(tp);
+
+        Board2Entity board2Entity = dto2.board2Entity();
+        board2Service.insert(board2Entity);
 
         return "redirect:board2";
     }
