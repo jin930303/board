@@ -14,11 +14,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+    <tr th:each="my:${list}">
+        <td th:text="${my.id}"></td>
+        <td th:text="${my.title}"></td>
+        <td th:text="${my.inputDate}"></td>
+        <td th:text="${my.author}"></td>
     </tr>
     </tbody>
 </table>
