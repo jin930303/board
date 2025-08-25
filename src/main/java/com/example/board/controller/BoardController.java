@@ -14,8 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class BoardController {
     Board2Service board2Service;
 
 
-    @GetMapping(value = "board1")
+    @GetMapping(value = "/board1")
     public String board1(Model mo){
         List<BoardEntity> list = boardService.out();
         mo.addAttribute("list",list);
@@ -75,7 +74,7 @@ public class BoardController {
         return "redirect:board1";
     }
 
-    @GetMapping(value = "board2")
+    @GetMapping(value = "/board2")
     public String board6(Model mo){
         List<Board2Entity> list = board2Service.out();
         mo.addAttribute("list",list);
@@ -95,12 +94,39 @@ public class BoardController {
         dto2.setContent(content);
         dto2.setTitle(title);
         LocalDateTime ld = LocalDateTime.now();
-        Timestamp tp = Timestamp.valueOf(ld);
-        dto2.setInputDate(tp);
+        dto2.setInputDate(ld);
 
         Board2Entity board2Entity = dto2.board2Entity();
         board2Service.insert(board2Entity);
 
         return "redirect:board2";
     }
+
+    @GetMapping(value = "/detail/{id}")
+    public String board9(@PathVariable("id") Long id, Model mo){
+        Board2Entity data = board2Service.findById(id);
+        mo.addAttribute("data",data);
+        return "board2Detail";
+    }
+
+    @GetMapping(value = "/update/{id}")
+    public String board10(@PathVariable("id") Long id, Model mo){
+        Board2Entity entity =board2Service.updateFindById(id);
+        mo.addAttribute("entity",entity);
+        return "update2BoardView";
+    }
+
+    @PostMapping(value = "update2Save/{id}")
+    public String board11(@PathVariable("id") Long id, Board2DTO dto){
+        dto.setId(id);
+        LocalDateTime now = LocalDateTime.now();
+        dto.setInputDate(now);
+        board2Service.updateById(dto.getId(),dto.getTitle(),dto.getContent(),dto.getInputDate());
+
+        return "redirect:/board2";
+    }
+
+
+
+
 }

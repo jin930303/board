@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,13 +27,13 @@ public class Board2Entity {
     private String content;
 
     @Column(name = "inputdate")
-    private Timestamp inputDate;
+    private LocalDateTime inputDate;
 
     @Column
     private String author;
 
     @Builder
-    public Board2Entity (long id, String title, String content, Timestamp inputDate, String author){
+    public Board2Entity (long id, String title, String content, LocalDateTime inputDate, String author){
         this.author=author;
         this.id=id;
         this.title=title;

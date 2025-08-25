@@ -1,0 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:insert="~{top:: top}"></div>
+
+<body>
+<div><a th:text="${data.author}"></a></div>
+<div><a th:text="${data.title}"></a></div>
+<div><a th:text="${data.content}"></a></div>
+<div><a th:text="${#temporals.format(data.inputDate,'MM-dd HH:mm:ss')}"></a></div>
+
+</body>
+
+</html>
