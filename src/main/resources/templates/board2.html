@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:insert="~{top:: top}"></div>
 <link rel="stylesheet" type="text/css" th:href="@{/css/board1.css}">
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script th:src="@{/js/board2.js}"></script>
 <body>
 <div><a href="inputBoard2" id="inputBoard">게시판 생성</a></div>
 <table>
@@ -11,14 +13,16 @@
         <th><a href="detailBoard"></a>제목</th>
         <th>작성일</th>
         <th>작성자</th>
+        <th>수정/삭제</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="my:${list}">
         <td th:text="${my.id}"></td>
-        <td th:text="${my.title}"></td>
-        <td th:text="${my.inputDate}"></td>
+        <td><a th:href="@{detail/{id}(id=${my.id})}" th:text="${my.title}"></a></td>
+        <td th:text="${#temporals.format(my.inputDate,'yy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${my.author}"></td>
+        <td><a th:href="@{update/{id}(id=${my.id})}">수정</a>/<a href="#" th:onclick="delete2Board([[${my.id}]])">삭제</a></td>
     </tr>
     </tbody>
 </table>
