@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:insert="~{top:: top}"></div>
-<link rel="stylesheet" type="text/css" th:href="@{/css/board1.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/board2.css}">
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script th:src="@{/js/board2.js}"></script>
 <body>
 <div><a href="inputBoard2" id="inputBoard">게시판 생성</a></div>
+
 <table>
+    <colgroup>
+        <col style="width:7%">
+        <col>
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+    </colgroup>
     <thead>
     <tr>
         <th>번호</th>
@@ -26,5 +34,6 @@
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

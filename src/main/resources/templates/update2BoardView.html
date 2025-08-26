@@ -1,9 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org" >
 <div th:insert="~{top:: top}"></div>
 <body>
-<link rel="stylesheet" type="text/css" th:href="@{/css/board1.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/board2.css}">
 <form th:action="@{/update2Save/{id}(id=${entity.id})}" method="post">
 <table>
+    <colgroup>
+        <col style="width:7%">
+        <col>
+        <col>
+        <col style="width:7%">
+    </colgroup>
     <tr>
         <th>번호</th>
         <th>제목</th>
