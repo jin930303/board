@@ -1,0 +1,18 @@
+table {
+    text-align : center;
+    margin : 10% 0 0 10%;
+    border : 0.5px solid #ddd;
+    width : 80%;
+    }
+th{
+    text-align : center;
+    border-bottom : 0.5px solid #ddd;
+    }
+body{
+    top : 30%;
+    }
+#inputBoard{
+    text-align : center;
+    margin-left :85%;
+    top : 30%;
+}
