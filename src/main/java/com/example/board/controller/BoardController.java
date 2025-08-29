@@ -1,10 +1,12 @@
 package com.example.board.controller;
 
 import com.example.board.dto.Board2DTO;
+import com.example.board.dto.Board3DTO;
 import com.example.board.dto.BoardDTO;
 import com.example.board.entity.Board2Entity;
 import com.example.board.entity.BoardEntity;
 import com.example.board.service.Board2Service;
+import com.example.board.service.Board3Service;
 import com.example.board.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 
 
 import java.time.LocalDateTime;
@@ -28,6 +29,9 @@ public class BoardController {
 
     @Autowired
     Board2Service board2Service;
+
+    @Autowired
+    Board3Service board3Service;
 
 
     @GetMapping(value = "/board1")
@@ -141,7 +145,26 @@ public class BoardController {
         return "redirect:/board2";
     }
 
+    @GetMapping(value = "/board3")
+    public String board12(){
 
 
+        return "board3";
+    }
+
+    @GetMapping(value = "inputBoard3")
+    public String board13(){
+
+
+        return "inputBoard3";
+    }
+
+    @PostMapping(value = "boardSave3")
+    public String board14(Board3DTO board3DTO){
+
+        board3Service.saveBoard(board3DTO);
+
+        return "redirect:/board3";
+    }
 
 }
