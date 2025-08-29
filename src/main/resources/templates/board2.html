@@ -5,8 +5,9 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 <script th:src="@{/js/board2.js}"></script>
 <body>
+<div class="board-container">
 <div><a href="inputBoard2" id="inputBoard">게시판 생성</a></div>
-
+</div>
 <table>
     <colgroup>
         <col style="width:7%">
@@ -34,25 +35,28 @@
     </tr>
     </tbody>
 </table>
-<div>
+<div class="board-bottom-container">
+    <div class="search-container">
     <input type="text" id="search_kw" th:value="${kw}">
     <button type="button" id="btn_search">찾기</button>
+    </div>
+    <div class="pagination">
+    <span th:if="${startPage>1}">
+        <a th:href="@{/board2(page=${currentPage - 1 })}">이전</a>
+    </span>
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <a th:href="@{/board2(page=${i})}" th:text="${i}"
+           th:style="${i == currentPage} ? 'font-weight:bold; color: red;':'' "></a>
+    </span>
+        <span th:if="${endPage<totalPages}">
+        <a th:href="@{/board2(page=${currentPage + 1})}">다음</a>
+    </span>
+    </div>
 </div>
 <form th:action="@{/question}" method="get" id="searchForm">
     <input type="hidden" id="kw" name="kw" th:value="${kw}">
 </form>
 
-<div>
-    <span th:if="${startPage>1}">
-        <a th:href="@{/board2(page=${currentPage - 1 })}">이전</a>
-    </span>
-    <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
-        <a th:href="@{/board2(page=${i})}" th:text="${i}"
-           th:style="${i == currentPage} ? 'font-weight:bold; color: red;':'' "></a>
-    </span>
-    <span th:if="${endPage<totalPages}">
-        <a th:href="@{/board2(page=${currentPage + 1})}">다음</a>
-    </span>
-</div>
+
 </body>
 </html>
