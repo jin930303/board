@@ -8,6 +8,7 @@ import com.example.board.service.Board2Service;
 import com.example.board.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -75,9 +76,23 @@ public class BoardController {
     }
 
     @GetMapping(value = "/board2")
-    public String board6(Model mo){
-        List<Board2Entity> list = board2Service.out();
-        mo.addAttribute("list",list);
+    public String board6(Model mo,@RequestParam(defaultValue = "1")int page){
+        Page<Board2DTO> boardList = board2Service.getBoardList(page);
+
+        int currentPage = boardList.getNumber()+1;
+        int totalPages = boardList.getTotalPages();
+        //블록 페이징
+
+        int pageSize=5;
+        int startPage = ((currentPage-1) / pageSize) * pageSize +1;
+        int endPage = Math.min(startPage + pageSize -1, totalPages);
+
+        mo.addAttribute("boardList",boardList);
+        mo.addAttribute("currentPage",currentPage); //현재 페이지
+        mo.addAttribute("totalPages",totalPages);
+        mo.addAttribute("startPage",startPage);
+        mo.addAttribute("endPage",endPage);
+        // 총 페이지
         return "board2";
     }
 
