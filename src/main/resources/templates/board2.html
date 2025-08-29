@@ -25,7 +25,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="my:${list}">
+    <tr th:each="my:${boardList}">
         <td th:text="${my.id}"></td>
         <td><a th:href="@{detail/{id}(id=${my.id})}" th:text="${my.title}"></a></td>
         <td th:text="${#temporals.format(my.inputDate,'yy-MM-dd HH:mm:ss')}"></td>
@@ -34,6 +34,25 @@
     </tr>
     </tbody>
 </table>
+<div>
+    <input type="text" id="search_kw" th:value="${kw}">
+    <button type="button" id="btn_search">찾기</button>
+</div>
+<form th:action="@{/question}" method="get" id="searchForm">
+    <input type="hidden" id="kw" name="kw" th:value="${kw}">
+</form>
 
+<div>
+    <span th:if="${startPage>1}">
+        <a th:href="@{/board2(page=${currentPage - 1 })}">이전</a>
+    </span>
+    <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <a th:href="@{/board2(page=${i})}" th:text="${i}"
+           th:style="${i == currentPage} ? 'font-weight:bold; color: red;':'' "></a>
+    </span>
+    <span th:if="${endPage<totalPages}">
+        <a th:href="@{/board2(page=${currentPage + 1})}">다음</a>
+    </span>
+</div>
 </body>
 </html>

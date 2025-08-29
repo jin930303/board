@@ -28,4 +28,11 @@ public class Board2DTO {
                 .author(author)
                 .build();
     }
+    public Board2DTO(Board2Entity board2Entity){
+        this.id= board2Entity.getId();
+        this.title= board2Entity.getTitle();
+        this.author= board2Entity.getAuthor();
+        this.inputDate=board2Entity.getInputDate();
+    }
+
 }

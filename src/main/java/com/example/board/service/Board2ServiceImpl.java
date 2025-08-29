@@ -1,16 +1,18 @@
 package com.example.board.service;
 
+import com.example.board.dto.Board2DTO;
 import com.example.board.entity.Board2Entity;
 import com.example.board.repository.Board2Repository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Setter
@@ -50,5 +52,29 @@ public class Board2ServiceImpl implements Board2Service {
     public void deleteByid(Long id) {
         board2Repository.deleteById(id);
     }
+
+    @Override
+    public Page<Board2DTO> getBoardList(int page) {
+
+        int pageNum = (page ==0)?0: page-1;
+        int pageSize = 10;
+
+        int startRow = pageNum * pageSize +1;
+        int endRow = startRow + pageSize -1;
+
+        System.out.println("시작 :" +startRow);
+        System.out.println("종료 :" +endRow);
+
+        List<Board2Entity> entityList = board2Repository.findByPaging(startRow,endRow);
+
+        long totalCount = board2Repository.countBoard2();
+
+        List<Board2DTO> dtoList = entityList.stream()
+                                            .map(Board2DTO::new)
+                                            .toList();
+        Pageable pageable =PageRequest.of(pageNum,pageSize);
+        return new PageImpl<>(dtoList,pageable,totalCount);
+    }
+
 
 }
