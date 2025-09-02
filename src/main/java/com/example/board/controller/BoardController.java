@@ -4,6 +4,7 @@ import com.example.board.dto.Board2DTO;
 import com.example.board.dto.Board3DTO;
 import com.example.board.dto.BoardDTO;
 import com.example.board.entity.Board2Entity;
+import com.example.board.entity.Board3Entity;
 import com.example.board.entity.BoardEntity;
 import com.example.board.service.Board2Service;
 import com.example.board.service.Board3Service;
@@ -146,9 +147,9 @@ public class BoardController {
     }
 
     @GetMapping(value = "/board3")
-    public String board12(){
-
-
+    public String board12(Model mo){
+        List<Board3Entity> list = board3Service.out();
+        mo.addAttribute("list",list);
         return "board3";
     }
 
@@ -165,6 +166,37 @@ public class BoardController {
         board3Service.saveBoard(board3DTO);
 
         return "redirect:/board3";
+    }
+
+    @GetMapping(value = "/update3/{id}")
+    public String board15(@PathVariable("id") Long id,Model mo){
+
+        Board3Entity entity = board3Service.findById(id);
+        mo.addAttribute("entity",entity);
+
+        return "update3BoardView";
+    }
+
+    @PostMapping(value = "update3Save/{id}")
+    public String board16(@PathVariable("id")Long id,Board3DTO board3DTO ){
+
+        board3Service.UpdateBoard(board3DTO,id);
+        return "redirect:/board3";
+    }
+
+    @GetMapping(value = "detail3/{id}")
+    public String board17(@PathVariable("id") Long id,Model mo){
+        Board3Entity entity =board3Service.findById(id);
+        System.out.println("데이터 확인"+entity.getFilePath());
+        String filePath = entity.getFilePath();
+        if(filePath!=null) {
+            String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
+            System.out.println("파일이름"+fileName);
+            mo.addAttribute("fileName", fileName);
+
+        }
+        mo.addAttribute("entity", entity);
+        return "board3Detail";
     }
 
 }
