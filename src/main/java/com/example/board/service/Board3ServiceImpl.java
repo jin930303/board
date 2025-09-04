@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -142,6 +145,47 @@ public class Board3ServiceImpl implements Board3Service{
         }
         board3Repository.deleteById(id);
 
+    }
+
+    @Override
+    public Page<Board3DTO> getBoardList(int page) {
+        int pageNum = (page==0) ? 0 : page-1;
+        int pageSize = 10;
+
+        int startRow = pageNum * pageSize +1;
+        int endRow = startRow + pageSize -1;
+
+        System.out.println(" 시작 :" + startRow);
+        System.out.println(" 끝  :" + endRow);
+
+        List<Board3Entity> list = board3Repository.findByPage(startRow,endRow);
+
+        long totalCount = board3Repository.countBoard3();
+
+        List<Board3DTO> dtolist = list.stream().map(Board3DTO::new).toList();
+
+        Pageable pageable = PageRequest.of(pageNum,pageSize);
+        
+        return new PageImpl<>(dtolist,pageable,totalCount);
+    }
+
+    @Override
+    public Page<Board3DTO> searchBoardList(String kw, int page) {
+
+        int pageNum = (page==0)? 0: page -1 ;
+        int pageSize = 10;
+        int startRow = pageNum * pageSize +1;
+        int endRow = startRow * pageSize -1;
+
+        List<Board3Entity> list = board3Repository.findByPageAndKeyword(startRow,endRow,kw);
+
+        long totalCount = board3Repository.countBoard3WithKeyword(kw);
+
+        List<Board3DTO> dtoList = list.stream().map(Board3DTO::new).toList();
+
+        Pageable pageable = PageRequest.of(pageNum,pageSize);
+
+        return new PageImpl<>(dtoList,pageable,totalCount);
     }
 
 }

@@ -147,9 +147,29 @@ public class BoardController {
     }
 
     @GetMapping(value = "/board3")
-    public String board12(Model mo){
-        List<Board3Entity> list = board3Service.out();
-        mo.addAttribute("list",list);
+    public String board12(Model mo,@RequestParam(defaultValue = "1")int page
+                            ,@RequestParam(required = false)String kw){
+        Page<Board3DTO> boardlist;
+        if(kw != null && !kw.trim().isEmpty()){
+            boardlist=board3Service.searchBoardList(kw,page);
+        }
+        else {
+            boardlist = board3Service.getBoardList(page);
+        }
+
+        int currentPage = boardlist.getNumber()+1;
+        int totalPages = boardlist.getTotalPages();
+
+        int pageSize = 5;
+        int startPage = ((currentPage-1)/pageSize) * pageSize + 1 ;
+        int endPage = Math.min(startPage + pageSize -1,totalPages );
+
+        mo.addAttribute("list",boardlist);
+        mo.addAttribute("currentPage",currentPage);
+        mo.addAttribute("totalPages",totalPages);
+        mo.addAttribute("startPage",startPage);
+        mo.addAttribute("endPage",endPage);
+        mo.addAttribute("kw",kw);
         return "board3";
     }
 
