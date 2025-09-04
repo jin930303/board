@@ -1,6 +1,7 @@
 package com.example.board.dto;
 
 import com.example.board.entity.Board3Entity;
+import com.example.board.repository.Board3Repository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +34,8 @@ public class Board3DTO {
         this.fileSize=board3Entity.getFileSize();
         this.fileOriginalName=board3Entity.getFileOriginalName();
     }
+
+
 
 
 }
