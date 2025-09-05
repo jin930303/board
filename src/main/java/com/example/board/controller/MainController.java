@@ -11,4 +11,11 @@ public class MainController {
 
         return "main";
     }
+
+    @GetMapping(value = "/login")
+    public String login(){
+        return "login";
+    }
+
+
 }

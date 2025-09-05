@@ -1,0 +1,97 @@
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 50px); /* 뷰포트 높이 - 상단 바 높이 (예: 50px) */
+    width: 100%;
+}
+/* 로그인 컨테이너 */
+.login-container {
+    width: 360px;
+    padding: 40px 30px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+    text-align: center;
+    transform: translateY(-150px);
+}
+
+/* 폼 입력 필드 */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 15px 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+}
+
+.login-container input::placeholder {
+    color: #999;
+}
+
+/* 폼 제출 버튼 (로그인 버튼) - 현재 HTML에 없어 임시로 추가 */
+.login-container form {
+    margin-bottom: 20px;
+}
+.login-container form button {
+    width: 100%;
+    padding: 15px;
+    background-color: #e3000f; /* Homeplus 로고 색상과 유사하게 */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.login-container form button:hover {
+    background-color: #c7000e;
+}
+
+/* 회원가입 및 아이디/비밀번호 찾기 링크 */
+.member-container,
+.findMember-container {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.member-container a,
+.findMember-container a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.member-container a:hover,
+.findMember-container a:hover {
+    color: #000;
+}
+
+.findMember-container a:first-of-type {
+    margin-right: 5px;
+}
+.findMember-container a:last-of-type {
+    margin-left: 5px;
+}
+
+/* 아이디 저장 체크박스 (이미지에는 없지만 필요시 사용) */
+.save-id-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.save-id-checkbox label {
+    font-size: 14px;
+    color: #666;
+    margin-left: 5px;
+    cursor: pointer;
+}
