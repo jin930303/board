@@ -9,6 +9,7 @@ import com.example.board.entity.BoardEntity;
 import com.example.board.service.Board2Service;
 import com.example.board.service.Board3Service;
 import com.example.board.service.BoardService;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @Controller
 public class BoardController {
 
@@ -207,11 +208,11 @@ public class BoardController {
     @GetMapping(value = "detail3/{id}")
     public String board17(@PathVariable("id") Long id,Model mo){
         Board3Entity entity =board3Service.findById(id);
-        System.out.println("데이터 확인"+entity.getFilePath());
+        log.info(entity.getFilePath());
         String filePath = entity.getFilePath();
         if(filePath!=null) {
             String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
-            System.out.println("파일이름"+fileName);
+            log.info(fileName);
             mo.addAttribute("fileName", fileName);
 
         }
