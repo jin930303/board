@@ -5,6 +5,7 @@ import com.example.board.entity.Board3Entity;
 import com.example.board.repository.Board3Repository;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
+@Log4j2
 @Service
 @Setter
 @Getter
@@ -96,7 +97,7 @@ public class Board3ServiceImpl implements Board3Service{
 
         if(checkNewFile){
             if(wasFilePresent){
-                System.out.println("기존파일 변경 및 내용 수정");
+                log.info("기존파일 변경 및 내용 수정");
                 try{
                     Files.deleteIfExists(Paths.get(entity.getFilePath()));
                 }
@@ -141,7 +142,7 @@ public class Board3ServiceImpl implements Board3Service{
             }
         }
         catch(IOException e){
-            System.out.println("파일 삭제 실패");
+            log.info("파일 삭제 실패");
         }
         board3Repository.deleteById(id);
 
@@ -154,9 +155,9 @@ public class Board3ServiceImpl implements Board3Service{
 
         int startRow = pageNum * pageSize +1;
         int endRow = startRow + pageSize -1;
-
-        System.out.println(" 시작 :" + startRow);
-        System.out.println(" 끝  :" + endRow);
+        log.info("----------------");
+        log.info(startRow);
+        log.info(endRow);
 
         List<Board3Entity> list = board3Repository.findByPage(startRow,endRow);
 

@@ -60,6 +60,34 @@ $(document).ready(function(){
   });
 });
 
+$(document).ready(function(){
+  $("#checkEmail").on("click",function(){
+    let email = $("#email").val();
+
+    if(email == ""){
+       $("#emailCheckMessage").text("이메일을 입력해주세요.").css("color", "red");
+              return;
+    }
+
+    $.ajax({
+      url:"/checkEmail",
+      type: "post",
+      data : {email,email},
+      success : function(response){
+        if(response==="available"){
+          $("#emailCheckMessage").text("사용 가능한 이메일입니다.").css("color", "green");
+        }
+        else{
+           $("#emailCheckMessage").text("사용중인 이메일입니다.").css("color", "red");
+        }
+      },
+      error: function(){
+         alert("서버 통신 오류가 발생했습니다.");
+      }
+    });
+  });
+});
+
 function validatePassword(){
   let pw =$("#pw").val();
   let checkPw = $("#checkPw").val();
