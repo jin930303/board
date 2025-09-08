@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MemberService {
-    boolean findId(String id);
+    boolean checkUsernameDuplication(String username);
 
     void save(MemberDTO memberDTO);
 

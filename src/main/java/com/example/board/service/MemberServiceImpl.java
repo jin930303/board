@@ -17,9 +17,8 @@ public class MemberServiceImpl implements MemberService {
     MemberRepository memberRepository;
 
     @Override
-    public boolean findId(String id) {
-        int count = memberRepository.countById(id);
-        return count>0;
+    public boolean checkUsernameDuplication(String username) {
+        return memberRepository.existsByUsername(username);
     }
 
     @Override
@@ -40,11 +39,13 @@ public class MemberServiceImpl implements MemberService {
 
         MemberEntity entity = new MemberEntity();
         entity.setId(memberDTO.getId());
+        entity.setUsername(memberDTO.getUsername());
         entity.setPw(memberDTO.getPw());
-        entity.setName(memberDTO.getName());
+        entity.setRealname(memberDTO.getRealname());
         entity.setEmail(memberDTO.getEmail());
         entity.setBirth(memberDTO.getBirth());
         entity.setNickname(memberDTO.getNickname());
+        entity.setRole(memberDTO.getRole());
         memberRepository.save(entity);
     }
 

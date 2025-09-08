@@ -1,9 +1,6 @@
 package com.example.board.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,25 +10,32 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Table(name = "member")
+@SequenceGenerator(name = "id_seq",sequenceName = "id_seq",initialValue = 1,allocationSize = 1)
 public class MemberEntity {
 
     @Id
     @Column
-    String id;
+    @GeneratedValue(generator = "id_seq",strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @Column
-    String pw;
+    private String username;
 
     @Column
-    String name;
+    private String pw;
 
     @Column
-    String nickname;
+    private String realname;
 
     @Column
-    String email;
+    private String nickname;
 
     @Column
-    LocalDate birth;
+    private String email;
 
+    @Column
+    private LocalDate birth;
+
+    @Column
+    private String role;
 }
