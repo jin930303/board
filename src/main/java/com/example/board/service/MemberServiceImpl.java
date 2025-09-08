@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Setter
 @Getter
@@ -18,7 +20,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean checkUsernameDuplication(String username) {
-        return memberRepository.existsByUsername(username);
+        int count = memberRepository.countByUsername(username);
+        return count>0;
     }
 
     @Override
@@ -32,6 +35,11 @@ public class MemberServiceImpl implements MemberService {
     public boolean findEmail(String email) {
         int count = memberRepository.countByEmail(email);
         return count>0;
+    }
+
+    @Override
+    public Optional<MemberEntity> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
 
     @Override
