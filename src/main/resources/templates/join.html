@@ -5,9 +5,9 @@
 <script>
   $(document).ready(function(){
       $("#checkId").on("click", function(){
-          let id = $("#id").val();
+          let username = $("#username").val();
 
-          if (id === "") {
+          if (username === "") {
               $("#idCheckMessage").text("아이디를 입력해주세요.").css("color", "red");
               return;
           }
@@ -15,7 +15,7 @@
           $.ajax({
               url: "/checkId", // 서버의 URL
               type: "POST",    // POST 방식으로 전송
-              data: { id: id }, // 서버에 보낼 데이터
+              data: { username: username }, // 서버에 보낼 데이터
               success: function(response){
                   // 서버로부터 응답을 받았을 때 실행되는 함수
                   if (response === "available") {
@@ -129,8 +129,8 @@ function validationEmail(){
   <div class="foam-container">
     <form th:action="@{/memberSave}" method="post">
       <div class="id-group">
-        <label for="id">아이디</label>
-        <input type="text" name="id" id="id" placeholder="아이디를 입력해주세요" required>
+        <label for="username">아이디</label>
+        <input type="text" name="username" id="username" placeholder="아이디를 입력해주세요" required>
         <button type="button" id="checkId" >중복확인</button>
         <p id="idCheckMessage" class="message"></p>
       </div>

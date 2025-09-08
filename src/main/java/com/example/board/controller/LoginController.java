@@ -20,8 +20,8 @@ public class LoginController {
 
     @PostMapping(value = "/checkId")
     @ResponseBody
-    public String checkId(@RequestParam("id") String id){
-        boolean exist = memberService.findId(id);
+    public String checkId(@RequestParam("username") String username){
+        boolean exist = memberService.checkUsernameDuplication(username);
         if(exist){
             return "duplicate";
         }

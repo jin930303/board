@@ -36,6 +36,8 @@ dependencies {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
 	}
 
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	// Database Driver
 	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
