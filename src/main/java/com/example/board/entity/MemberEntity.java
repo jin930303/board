@@ -18,7 +18,7 @@ public class MemberEntity {
     @GeneratedValue(generator = "id_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column

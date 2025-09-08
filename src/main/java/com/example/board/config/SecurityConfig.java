@@ -16,10 +16,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (개발 편의상, 실제로는 활성화 권장)
                 .authorizeHttpRequests(authorize -> authorize
-                        // .antMatchers("/login", "/join").permitAll() // 이전 방식
-                        .requestMatchers("/login", "/join").permitAll() // 새로운 방식: 특정 URL 접근 허용
+                        // .antMatchers("/login", "/join").permitAll() // 이전 방식 // 새로운 방식: 특정 URL 접근 허용
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/checkNickname","/checkId","/checkEmail","/memberSave").permitAll()
+                        .requestMatchers("/login", "/join","/board3/**","/board2/**","/board1/**","/").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
 
@@ -27,7 +31,7 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")             // 로그인 페이지 URL
                         .loginProcessingUrl("/login")    // 로그인 폼 POST 요청을 처리할 URL (자동 처리)
-                        .defaultSuccessUrl("/home", true)// 로그인 성공 시 이동할 URL
+                        .defaultSuccessUrl("/", true)// 로그인 성공 시 이동할 URL
                         .failureUrl("/login?error=true") // 로그인 실패 시 이동할 URL
                 )
 
