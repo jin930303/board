@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
+
+
     @GetMapping(value = "/")
     public String home(){
 
@@ -13,9 +15,8 @@ public class MainController {
     }
 
     @GetMapping(value = "/login")
-    public String login(){
+    public String login1(){
         return "login";
     }
-
 
 }

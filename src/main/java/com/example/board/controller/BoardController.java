@@ -43,7 +43,7 @@ public class BoardController {
         return "board1";
     }
 
-    @GetMapping(value ="inputBoard" )
+    @GetMapping(value ="/inputBoard" )
     public String board2(){
 
         return "inputBoard";
@@ -102,13 +102,13 @@ public class BoardController {
         return "board2";
     }
 
-    @GetMapping(value = "inputBoard2")
+    @GetMapping(value = "/inputBoard2")
     public String board7(){
 
         return "inputBoard2";
     }
 
-    @PostMapping(value = "boardSave2")
+    @PostMapping(value = "/boardSave2")
     public String board8(@RequestParam("title") String title, @RequestParam("content") String content
                         , @RequestParam("author") String author, Board2DTO dto2){
         dto2.setAuthor(author);
