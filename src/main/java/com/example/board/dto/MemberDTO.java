@@ -14,16 +14,16 @@ public class MemberDTO {
 
     private Long id;
     private String username;
-    private String pw;
+    private String password;
     private String realname;
     private String nickname;
     private String email;
     private LocalDate birth;
-    private String role;
+    private String role ;
 
     public MemberDTO(MemberEntity memberEntity){
         this.id=memberEntity.getId();
-        this.pw=memberEntity.getPw();
+        this.password=memberEntity.getPassword();
         this.username=memberEntity.getUsername();
         this.nickname=memberEntity.getNickname();
         this.realname=memberEntity.getRealname();

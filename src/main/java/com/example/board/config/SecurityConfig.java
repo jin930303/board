@@ -1,50 +1,63 @@
 package com.example.board.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
+
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (개발 편의상, 실제로는 활성화 권장)
-                .authorizeHttpRequests(authorize -> authorize
-                        // .antMatchers("/login", "/join").permitAll() // 이전 방식 // 새로운 방식: 특정 URL 접근 허용
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/checkNickname","/checkId","/checkEmail","/memberSave").permitAll()
-                        .requestMatchers("/login", "/join","/board3/**","/board2/**","/board1/**","/").permitAll()
-                        .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
-                )
-
-                // 폼 기반 로그인 설정
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")             // 로그인 페이지 URL
-                        .loginProcessingUrl("/login")    // 로그인 폼 POST 요청을 처리할 URL (자동 처리)
-                        .defaultSuccessUrl("/", true)// 로그인 성공 시 이동할 URL
-                        .failureUrl("/login?error=true") // 로그인 실패 시 이동할 URL
-                )
-
-                // 로그아웃 설정
-                .logout(logout -> logout
-                        .logoutUrl("/logout")            // 로그아웃 요청 URL
-                        .logoutSuccessUrl("/login")      // 로그아웃 성공 시 이동할 URL
-                );
-        return httpSecurity.build();
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/checkNickname", "/checkId", "/checkEmail", "/memberSave").permitAll()
+                        .requestMatchers("/login", "/join", "/board1/**", "/board2/**", "/board3/**", "/").permitAll()
+                        .requestMatchers("/boardSave", "/inputBoard", "/updateBoard", "/updateSave").authenticated()
+                        .requestMatchers("inputBoard2", "/boardSave2", "/detail/{id}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/login").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
+                )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                );
+        return http.build();
+    }
+
+
+
+
 }

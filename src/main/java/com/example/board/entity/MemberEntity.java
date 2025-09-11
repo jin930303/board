@@ -3,6 +3,7 @@ package com.example.board.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -18,11 +19,11 @@ public class MemberEntity {
     @GeneratedValue(generator = "id_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "USERNAME")
     private String username;
 
-    @Column
-    private String pw;
+    @Column(name = "PASSWORD")
+    private String password;
 
     @Column
     private String realname;
@@ -36,6 +37,6 @@ public class MemberEntity {
     @Column
     private LocalDate birth;
 
-    @Column
-    private String role;
+    @ColumnDefault("role_user")
+    private String role ;
 }

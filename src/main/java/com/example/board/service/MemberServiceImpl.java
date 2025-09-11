@@ -3,20 +3,23 @@ package com.example.board.service;
 import com.example.board.dto.MemberDTO;
 import com.example.board.entity.MemberEntity;
 import com.example.board.repository.MemberRepository;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@Setter
-@Getter
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
-    MemberRepository memberRepository;
+
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+        this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public boolean checkUsernameDuplication(String username) {
@@ -48,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity entity = new MemberEntity();
         entity.setId(memberDTO.getId());
         entity.setUsername(memberDTO.getUsername());
-        entity.setPw(memberDTO.getPw());
+        entity.setPassword(passwordEncoder.encode(memberDTO.getPassword()));
         entity.setRealname(memberDTO.getRealname());
         entity.setEmail(memberDTO.getEmail());
         entity.setBirth(memberDTO.getBirth());
