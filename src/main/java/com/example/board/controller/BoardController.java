@@ -2,17 +2,23 @@ package com.example.board.controller;
 
 import com.example.board.dto.Board2DTO;
 import com.example.board.dto.Board3DTO;
+import com.example.board.dto.Board4DTO;
 import com.example.board.dto.BoardDTO;
 import com.example.board.entity.Board2Entity;
 import com.example.board.entity.Board3Entity;
+import com.example.board.entity.Board4Entity;
 import com.example.board.entity.BoardEntity;
+import com.example.board.repository.Board4Repository;
 import com.example.board.service.Board2Service;
 import com.example.board.service.Board3Service;
+import com.example.board.service.Board4Service;
 import com.example.board.service.BoardService;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -34,6 +40,9 @@ public class BoardController {
 
     @Autowired
     Board3Service board3Service;
+
+    @Autowired
+    Board4Service board4Service;
 
 
     @GetMapping(value = "/board1")
@@ -218,6 +227,55 @@ public class BoardController {
         }
         mo.addAttribute("entity", entity);
         return "board3Detail";
+    }
+
+    @GetMapping(value = "/board4")
+    public String board18(Model mo){
+                List<Board4Entity> list = board4Service.out();
+                mo.addAttribute("list",list);
+        return "board4";
+    }
+
+    @GetMapping(value = "inputBoard4")
+
+    public String board19(){
+        return "inputBoard4";
+    }
+
+    @PostMapping(value = "boardSave4")
+    public String board20(@AuthenticationPrincipal UserDetails userDetails, Board4DTO board4DTO) {
+
+            String author = userDetails.getUsername();
+            board4DTO.setAuthor(author);
+            board4Service.board4Save(board4DTO);
+
+        return "redirect:/board4";
+    }
+    @GetMapping(value = "update4/{id}")
+    public String board21(@PathVariable("id") Long id,Model mo){
+            Board4Entity entity = board4Service.findById(id);
+            mo.addAttribute("entity",entity);
+        return "update4BoardView";
+    }
+    @PostMapping(value = "/update4Save/{id}")
+    public String board22(@PathVariable("id")Long id,Board4DTO board4DTO){
+
+        board4Service.updateBoard(id,board4DTO);
+        return"redirect:/board4";
+    }
+    @GetMapping(value = "detail4/{id}")
+    public String board23(@PathVariable("id")Long id,Model mo){
+        Board4Entity entity = board4Service.findById(id);
+        log.info(entity.getFilePath());
+        String filePath = entity.getFilePath();
+        if(filePath!=null) {
+            String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1);
+            log.info(fileName);
+            mo.addAttribute("fileName", fileName);
+
+        }
+        mo.addAttribute("entity",entity);
+        return "board4Detail";
     }
 
 }

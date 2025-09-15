@@ -39,4 +39,6 @@ public class MemberEntity {
 
     @ColumnDefault("role_user")
     private String role ;
+
+
 }

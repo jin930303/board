@@ -3,6 +3,7 @@ package com.example.board.controller;
 
 import com.example.board.service.Board2Service;
 import com.example.board.service.Board3Service;
+import com.example.board.service.Board4Service;
 import com.example.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +24,8 @@ public class BoardRestController {
     @Autowired
     Board3Service board3Service;
 
+    @Autowired
+    Board4Service board4Service;
 
     @DeleteMapping(value = "deleteBoard/{BOARDID}")
     public String Board(@PathVariable("BOARDID")long BOARDID){
@@ -41,4 +44,11 @@ public class BoardRestController {
         board3Service.DeleteById(id);
         return "redirect:/board3";
     }
+
+    @DeleteMapping(value = "/delete4Board/{id}")
+    public String board4(@PathVariable("id")Long id) throws IOException{
+        board4Service.deleteById(id);
+        return "redirect:/board4";
+    }
+
 }
