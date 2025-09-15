@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="top"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <head>
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -22,7 +23,12 @@
       </li>
       <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">게시판2.0ver <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="/board4">권한 crud</a></li>
+          <li sec:authorize="isAuthenticated()">
+            <a href="/board4">권한 crud</a>
+          </li>
+          <li sec:authorize="isAnonymous()">
+            <a href="/login" onclick="alert('로그인이 필요한 페이지입니다. 로그인 해주세요.');">권한 crud</a>
+          </li>
           <li><a href="#">2-2</a></li>
           <li><a href="#">2-3</a></li>
         </ul>

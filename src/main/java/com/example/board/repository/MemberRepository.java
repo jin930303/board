@@ -21,4 +21,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity,Long> {
 
     @Query(value = "select * from member where username = :username",nativeQuery = true)
     Optional<MemberEntity> findByUsername(@Param("username") String username);
+
+
 }
