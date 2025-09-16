@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="~{top:: top}"></div>
+<script th:src="@{/js/board3.js}"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="board-container">
+<div><a th:href="@{inputBoard3}">게시판 작성</a></div>
+<table>
+    <colgroup>
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>게시일</th>
+            <th>작성자</th>
+            <th>수정/삭제</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:each="list:${list}">
+        <td th:text="${list.id}"></td>
+        <td><a th:href="@{detail3/{id}(id=${list.id})}" th:text="${list.title}"></a></td>
+        <td th:text="${list.inputDate}"></td>
+        <td th:text="${list.author}"></td>
+        <td><a th:href="@{update3/{id}(id=${list.id})}">수정</a><a href="#" th:onclick="delete3Board([[${list.id}]])">삭제</a></td>
+    </tr>
+    </tbody>
+</table>
+    <div class="search-container">
+        <form th:action="@{/board3}" method="get">
+            <input type="text" name="kw" placeholder="제목 또는 내용 검색" th:value="${kw}">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+    <div class="pagination">
+        <span th:if="${startPage>1}">
+            <a th:href="@{/board3(page=${currentPage - 1 }, kw=${kw})}">이전</a>
+        </span>
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a th:href="@{/board3(page=${i},kw=${kw})}" th:text="${i}"
+               th:style="${i == currentPage} ? 'font-weight:bold; color: red;' :'' "></a>
+        </span>
+        <span th:if="${endPage < totalPages}">
+            <a th:href="@{/board3(page=${currentPage +1 },kw=${kw})}">다음</a>
+        </span>
+    </div>
+
+</div>
+</body>
+</html>

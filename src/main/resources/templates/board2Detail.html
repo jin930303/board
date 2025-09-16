@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="~{top:: top}"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/css/board2DetailView.css}">
+<body>
+<div class="container">
+<div class="header">
+    <span class="head-title" th:text="${data.title}"></span>
+    <span class="head-author" th:text="${data.author}"></span>
+    <span class="head-date" th:text="${#temporals.format(data.inputDate,'MM-dd hh:mm:ss')}"></span>
+</div>
+<div class="content" th:text="${data.content}">
+</div>
+</div>
+</body>
+
+</html>

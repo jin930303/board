@@ -1,0 +1,44 @@
+/* 전체 컨테이너를 감싸는 영역 */
+.board-container {
+    width: 80%; /* 테이블과 동일한 너비로 설정 */
+    margin: 10% auto 0; /* 중앙 정렬 */
+    position: relative;
+}
+
+/* 게시판 생성 버튼 위치 조정 */
+#inputBoard {
+    position: absolute;
+    top: -40px; /* 테이블 상단에 위치시키기 위해 음수 값 사용 */
+    right: 0;
+    margin-left: 0; /* 기존 margin-left 속성 초기화 */
+}
+
+/* 테이블 스타일 (기존 코드 유지) */
+table {
+    text-align: center;
+    border: 0.5px solid #ddd;
+    width: 100%; /* 부모 컨테이너에 맞게 100%로 설정 */
+}
+
+th, td {
+    text-align: center;
+    border-bottom: 0.5px solid #ddd;
+}
+
+/* 검색창과 페이징 처리 영역을 위한 컨테이너 */
+.board-bottom-container {
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    align-items: center; /* 수평 가운데 정렬 */
+    margin-top: 20px; /* 테이블과의 간격 조정 */
+}
+.search-container{
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    gap : 5px;
+}
+/* 페이징 처리 영역 가운데 정렬 */
+.pagination {
+    margin-top: 10px;
+}

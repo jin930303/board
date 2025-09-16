@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="~{top:: top}"></div>
+<link rel="stylesheet" th:href="@{/css/boardWrite.css}">
+<body>
+<div class="board-write-container">
+  <form th:action="@{boardSave2}" method="post">
+
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input type="text" name="title" id="title" required placeholder="제목을 입력해주세요">
+    </div>
+
+    <div class="form-group">
+      <label for="content">내용</label>
+      <textarea style="resize: none;" rows="20" cols="20" name="content" id="content" required placeholder="내용을 입력해주새요"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="author">작성자</label>
+      <input type="text" id="author" name="author" required placeholder="작성자를 입력해주세요">
+    </div>
+
+    <button type="submit" class="submit-button" >생성</button>
+  </form>
+</div>
+</body>
+</html>

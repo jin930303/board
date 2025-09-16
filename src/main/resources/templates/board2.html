@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="~{top:: top}"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/css/board2.css}">
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script th:src="@{/js/board2.js}"></script>
+<body>
+<div class="board-container">
+<div><a href="inputBoard2" id="inputBoard">게시판 생성</a></div>
+</div>
+<table>
+    <colgroup>
+        <col style="width:7%">
+        <col>
+        <col style="width:7%">
+        <col style="width:7%">
+        <col style="width:7%">
+    </colgroup>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th><a href="detailBoard"></a>제목</th>
+        <th>작성일</th>
+        <th>작성자</th>
+        <th>수정/삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="my:${boardList}">
+        <td th:text="${my.id}"></td>
+        <td><a th:href="@{detail/{id}(id=${my.id})}" th:text="${my.title}"></a></td>
+        <td th:text="${#temporals.format(my.inputDate,'yy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${my.author}"></td>
+        <td><a th:href="@{update/{id}(id=${my.id})}">수정</a>/<a href="#" th:onclick="delete2Board([[${my.id}]])">삭제</a></td>
+    </tr>
+    </tbody>
+</table>
+<div class="board-bottom-container">
+    <div class="search-container">
+    <input type="text" id="search_kw" th:value="${kw}">
+    <button type="button" id="btn_search">찾기</button>
+    </div>
+    <div class="pagination">
+    <span th:if="${startPage>1}">
+        <a th:href="@{/board2(page=${currentPage - 1 })}">이전</a>
+    </span>
+        <span th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <a th:href="@{/board2(page=${i})}" th:text="${i}"
+           th:style="${i == currentPage} ? 'font-weight:bold; color: red;':'' "></a>
+    </span>
+        <span th:if="${endPage<totalPages}">
+        <a th:href="@{/board2(page=${currentPage + 1})}">다음</a>
+    </span>
+    </div>
+</div>
+<form th:action="@{/question}" method="get" id="searchForm">
+    <input type="hidden" id="kw" name="kw" th:value="${kw}">
+</form>
+
+
+</body>
+</html>
