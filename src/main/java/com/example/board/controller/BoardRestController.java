@@ -1,12 +1,13 @@
 package com.example.board.controller;
 
 
-import com.example.board.service.Board2Service;
-import com.example.board.service.Board3Service;
-import com.example.board.service.Board4Service;
-import com.example.board.service.BoardService;
+import com.example.board.dto.Board5DTO;
+import com.example.board.entity.Board5Entity;
+import com.example.board.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,9 @@ public class BoardRestController {
     @Autowired
     Board4Service board4Service;
 
+    @Autowired
+    Board5Service board5Service;
+
     @DeleteMapping(value = "deleteBoard/{BOARDID}")
     public String Board(@PathVariable("BOARDID")long BOARDID){
         boardService.delete(BOARDID);
@@ -46,9 +50,31 @@ public class BoardRestController {
     }
 
     @DeleteMapping(value = "/delete4Board/{id}")
-    public String board4(@PathVariable("id")Long id) throws IOException{
-        board4Service.deleteById(id);
-        return "redirect:/board4";
+    public ResponseEntity<String> board4(@PathVariable("id")Long id) {
+        try {
+            board4Service.deleteById(id);
+            return ResponseEntity.ok("success");
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body("error");
+        }
     }
 
+    @DeleteMapping(value = "/delete5Board/{id}")
+    public ResponseEntity<String> board5(@PathVariable("id")Long id){
+        try {
+            board5Service.deleteById(id);
+            return ResponseEntity.ok("success");
+        }
+        catch (Exception e){
+            return ResponseEntity.status(500).body("error");
+
+        }
+    }
+
+    @GetMapping(value ="/api/detail5Board/{id}" )
+    public Board5Entity getBoardDetail(@PathVariable("id")Long id){
+        Board5Entity entity = board5Service.findById(id);
+        return entity;
+    }
 }

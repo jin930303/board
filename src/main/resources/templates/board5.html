@@ -1,0 +1,43 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<script th:src="@{/js/board5.js}"></script>
+
+<div th:insert="~{top:: top}"></div>
+<body>
+<a th:href="@{/inputBoard5}">글쓰기</a>
+<table style="text-align:center;">
+  <COLGROUP>
+    <col style="width:7%">
+    <col style="">
+    <col style="width:7%">
+    <col style="width:7%">
+    <col style="width:7%">
+    <col style="width:7%">
+    <col sec:authorize="isAuthenticated()" style="width:7%">
+  </COLGROUP>
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>제목</th>
+    <th>작성자</th>
+    <th>작성일</th>
+    <th>좋아요</th>
+    <th>view</th>
+    <th sec:authorize="isAuthenticated()">수정/삭제</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="list:${list}">
+    <td th:text="${list.id}"></td>
+    <td><a th:href="@{/detail5Board/{id}(id=${list.id})}" th:text="${list.title}"></a></td>
+    <td th:text="${list.author}"></td>
+    <td th:text="${#temporals.format(list.inputDate,'yy-MM-dd HH:mm:ss')}"></td>
+    <td th:text="${list.likes}"></td>
+    <td th:text="${list.views}"></td>
+    <td sec:authorize="isAuthenticated()"><a th:href="@{/update5Board/{id}(id=${list.id})}">수정</a>/<a href="#" th:onclick="|delete5Board([[${list.id}]])|">삭제</a></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+
+</html>

@@ -30,8 +30,8 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/images/**","/checkNickname", "/checkId", "/checkEmail", "/memberSave").permitAll()
                         .requestMatchers("/login", "/join", "/board1/**", "/board2/**", "/board3/**", "/").permitAll()
                         .requestMatchers("/boardSave", "/inputBoard", "/updateBoard", "/updateSave").permitAll()
-                        .requestMatchers("inputBoard2", "/boardSave2", "/detail/{id}").permitAll()
-                        .requestMatchers("/board4/**","update4/{id}","/boardSave4","/delete4Board/{id}").authenticated()
+                        .requestMatchers("inputBoard2", "/boardSave2", "/detail/{id}","/board5/**").permitAll()
+                        .requestMatchers("/board4/**","update4/{id}","/boardSave4","/delete4Board/{id}","update5Board/{id}","/delete5Board/{id}").authenticated()
                         .anyRequest().authenticated()
                 )
 
