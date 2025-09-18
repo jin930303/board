@@ -2,7 +2,10 @@ package com.example.board.service;
 
 import com.example.board.dto.Board5DTO;
 import com.example.board.entity.Board5Entity;
+import com.example.board.entity.LikesLogEntity;
 import com.example.board.repository.Board5Repository;
+import com.example.board.repository.LikesLogRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,10 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,6 +26,13 @@ public class Board5ServiceImpl implements Board5Service {
 
     @Autowired
     Board5Repository board5Repository;
+
+    private final LikesLogRepository likesLogRepository;
+
+
+    public Board5ServiceImpl(LikesLogRepository likesLogRepository) {
+        this.likesLogRepository = likesLogRepository;
+    }
 
     @Value("${upload.file.path}")
     private String uploadDir;
@@ -70,8 +81,9 @@ public class Board5ServiceImpl implements Board5Service {
     }
 
     @Override
-    public Board5Entity findById(Long id) {
-        return board5Repository.findById(id).orElseThrow(()->new NullPointerException("찾는 게시판이 없습니다."));
+    public Board5Entity findByIdForUpdate(Long id) {
+
+     return board5Repository.findById(id).orElseThrow(()->new NullPointerException("찾는 게시판이 없습니다."));
     }
 
     @Override
@@ -133,6 +145,39 @@ public class Board5ServiceImpl implements Board5Service {
         }
 
         board5Repository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Board5Entity findById(Long id) {
+
+         Board5Entity entity= board5Repository.findById(id).orElseThrow(()->new NoSuchElementException("찾는 게시판이 없습니다."));
+
+         entity.setViews(entity.getViews()+1);
+        board5Repository.save(entity);
+
+        return entity ;
+    }
+
+    @Override
+    @Transactional
+    public int addLike(Long boardId, String userId) {
+        Optional<LikesLogEntity> exitingLike = likesLogRepository.findByBoardIdAndUserId(boardId,userId);
+
+        if(exitingLike.isPresent()){
+            throw new IllegalArgumentException("이미 좋아요를 눌렀습니다.");
+        }
+
+        LikesLogEntity newLike = new LikesLogEntity();
+        newLike.setBoardId(boardId);
+        newLike.setUserId(userId);
+        likesLogRepository.save(newLike);
+
+        Board5Entity board = board5Repository.findById(boardId)
+                .orElseThrow(()->new NoSuchElementException("게시글을 찾을 수 없습니다."));
+        board.setLikes(board.getLikes()+1);
+
+        return board.getLikes();
     }
 
 

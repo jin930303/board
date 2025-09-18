@@ -297,7 +297,7 @@ public class BoardController {
     @GetMapping(value = "/update5Board/{id}")
     public String board27(@PathVariable("id")Long id,Model mo){
 
-        Board5Entity entity = board5Service.findById(id);
+        Board5Entity entity = board5Service.findByIdForUpdate(id);
         mo.addAttribute("entity",entity);
 
         return "update5BoardView";

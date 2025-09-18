@@ -1,5 +1,6 @@
 package com.example.board.service;
 
+import com.example.board.entity.Board5Entity;
 import com.example.board.entity.BoardEntity;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface BoardService {
     void delete(long boardId);
 
     void updateById(BoardEntity boardEntity);
+
+
 }
