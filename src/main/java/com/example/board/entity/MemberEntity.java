@@ -40,5 +40,10 @@ public class MemberEntity {
     @ColumnDefault("role_user")
     private String role ;
 
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
 
 }

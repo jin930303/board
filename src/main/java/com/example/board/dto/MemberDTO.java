@@ -20,6 +20,8 @@ public class MemberDTO {
     private String email;
     private LocalDate birth;
     private String role ;
+    private String provider;
+    private String providerId;
 
     public MemberDTO(MemberEntity memberEntity){
         this.id=memberEntity.getId();
@@ -30,5 +32,7 @@ public class MemberDTO {
         this.email=memberEntity.getEmail();
         this.birth=memberEntity.getBirth();
         this.role=memberEntity.getRole();
+        this.provider=memberEntity.getProvider();
+        this.providerId=memberEntity.getProviderId();
     }
 }
