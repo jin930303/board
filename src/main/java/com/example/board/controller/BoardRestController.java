@@ -6,12 +6,11 @@ import com.example.board.entity.Board5Entity;
 import com.example.board.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.security.Principal;
+import java.util.NoSuchElementException;
 
 @RestController
 public class BoardRestController {
@@ -76,5 +75,23 @@ public class BoardRestController {
     public Board5Entity getBoardDetail(@PathVariable("id")Long id){
         Board5Entity entity = board5Service.findById(id);
         return entity;
+    }
+    @PostMapping(value = "/api/board5/like/{boardId}")
+    public ResponseEntity<Integer> addLike(@PathVariable("boardId")Long boardId, Principal principal){
+
+        if(principal==null){
+            return ResponseEntity.status(401).body(null);
+        }
+        String userId = principal.getName();
+        try{
+            int updateLikes = board5Service.addLike(boardId,userId);
+            return ResponseEntity.ok(updateLikes);
+        }
+        catch(IllegalArgumentException | NoSuchElementException e ){
+            return ResponseEntity.badRequest().body(null);
+        }
+        catch(Exception e ){
+            return ResponseEntity.status(500).body(null);
+        }
     }
 }

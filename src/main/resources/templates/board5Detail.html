@@ -8,11 +8,14 @@
     <p><strong>시간:</strong><span id="board-inputDate"></span> </p>
     <p><strong>작성자:</strong><span id="board-author"></span> </p>
     <p><strong>내용:</strong><span id="board-content"></span> </p>
+    <p><strong>조회수:</strong><span id="board-views"></span> </p>
+    <p><strong>공감:</strong><span id="board-likes"></span> </p>
     <h3>첨부이미지</h3>
     <div id="img-container"></div>
+    <button id="like-button">좋아요</button>
 </div>
 <script th:inline="javascript">
-    const boardId = [[${id}]]; 
+    const boardId = [[${id}]];
 
      $(document).ready(function(){
          if(boardId){
@@ -26,6 +29,8 @@
                      $('#board-content').text(data.content);
                      $('#board-inputDate').text(data.inputDate);
                      $('#board-author').text(data.author);
+                     $('#board-likes').text(data.likes);
+                     $('#board-views').text(data.views);
 
                      if(data.filePath){
                          const lastSlashIndex = data.filePath.lastIndexOf('\\');
@@ -48,6 +53,20 @@
              alert('유효하지 않은 게시글 ID입니다.');
          }
      });
+
+    $('#like-button').on('click', function(){
+        $.ajax({
+            url : `/api/board5/like/${boardId}`,
+            method : 'POST',
+            success : function(updateLikes){
+                alert('게시글을 추천하였습니다.');
+                $('#board-likes').text(updatedLikes);
+            },
+            error : function(xhr,status,error){
+                alert(xhr.responseText);
+            }
+        });
+    });
 </script>
 </body>
 

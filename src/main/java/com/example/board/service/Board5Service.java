@@ -10,9 +10,13 @@ public interface Board5Service {
 
     List<Board5Entity> out();
 
-    Board5Entity findById(Long id);
+    Board5Entity findByIdForUpdate(Long id);
 
     void updateBoard(Long id, Board5DTO board5DTO);
 
     void deleteById(Long id);
+
+    Board5Entity findById(Long id);
+
+    int addLike(Long boardId, String userId);
 }
