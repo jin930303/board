@@ -1,19 +1,8 @@
 package com.example.board.controller;
 
-import com.example.board.dto.Board2DTO;
-import com.example.board.dto.Board3DTO;
-import com.example.board.dto.Board4DTO;
-import com.example.board.dto.BoardDTO;
-import com.example.board.entity.Board2Entity;
-import com.example.board.entity.Board3Entity;
-import com.example.board.entity.Board4Entity;
-import com.example.board.entity.BoardEntity;
-import com.example.board.repository.Board4Repository;
-import com.example.board.service.Board2Service;
-import com.example.board.service.Board3Service;
-import com.example.board.service.Board4Service;
-import com.example.board.service.BoardService;
-import lombok.Getter;
+import com.example.board.dto.*;
+import com.example.board.entity.*;
+import com.example.board.service.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,6 +32,9 @@ public class BoardController {
 
     @Autowired
     Board4Service board4Service;
+
+    @Autowired
+    Board5Service board5Service;
 
 
     @GetMapping(value = "/board1")
@@ -228,7 +220,7 @@ public class BoardController {
         mo.addAttribute("entity", entity);
         return "board3Detail";
     }
-
+    //board4 부분
     @GetMapping(value = "/board4")
     public String board18(Model mo){
                 List<Board4Entity> list = board4Service.out();
@@ -276,6 +268,52 @@ public class BoardController {
         }
         mo.addAttribute("entity",entity);
         return "board4Detail";
+    }
+    //board5 부분
+    @GetMapping(value = "/board5")
+    public String board24(Model mo){
+
+        List<Board5Entity> list = board5Service.out();
+        mo.addAttribute("list",list);
+
+        return "board5";
+    }
+
+    @GetMapping(value = "/inputBoard5")
+    public String board25(){
+
+        return "inputBoard5";
+    }
+
+    @PostMapping(value = "/boardSave5")
+    public String board26(Board5DTO board5DTO,@AuthenticationPrincipal UserDetails userDetails){
+        String author = userDetails.getUsername();
+        board5DTO.setAuthor(author);
+        board5Service.save(board5DTO);
+
+        return "redirect:/board5";
+    }
+
+    @GetMapping(value = "/update5Board/{id}")
+    public String board27(@PathVariable("id")Long id,Model mo){
+
+        Board5Entity entity = board5Service.findById(id);
+        mo.addAttribute("entity",entity);
+
+        return "update5BoardView";
+    }
+    @PostMapping(value = "/update5Save/{id}")
+    public String Board28(@PathVariable("id")Long id,Board5DTO board5DTO){
+
+        board5Service.updateBoard(id,board5DTO);
+
+        return "redirect:/board5";
+    }
+
+    @GetMapping("/detail5Board/{id}")
+    public String board29(@PathVariable("id")Long id,Model mo){
+        mo.addAttribute("id",id);
+        return "board5Detail";
     }
 
 }

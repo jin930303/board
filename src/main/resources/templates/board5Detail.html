@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org"xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:insert="~{top:: top}"></div>
+<link rel="stylesheet" type="text/css" th:href="@{/css/board2DetailView.css}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+<div id="board-detail">
+    <p><strong>제목:</strong><span id="board-title"></span> </p>
+    <p><strong>시간:</strong><span id="board-inputDate"></span> </p>
+    <p><strong>작성자:</strong><span id="board-author"></span> </p>
+    <p><strong>내용:</strong><span id="board-content"></span> </p>
+    <h3>첨부이미지</h3>
+    <div id="img-container"></div>
+</div>
+<script th:inline="javascript">
+    const boardId = [[${id}]]; 
+
+     $(document).ready(function(){
+         if(boardId){
+             $.ajax({
+                 // 주의: URL 경로에 자바스크립트 변수를 사용해야 함.
+                 // Thymeleaf 변수가 아닌 boardId 변수를 사용
+                 url: '/api/detail5Board/' + boardId,
+                 method: 'GET',
+                 success:function(data){
+                     $('#board-title').text(data.title);
+                     $('#board-content').text(data.content);
+                     $('#board-inputDate').text(data.inputDate);
+                     $('#board-author').text(data.author);
+
+                     if(data.filePath){
+                         const lastSlashIndex = data.filePath.lastIndexOf('\\');
+                         const fileName = data.filePath.substring(lastSlashIndex + 1);
+
+                         // 주의: 백틱(``)을 사용하여 변수 삽입
+                         const imgUrl = `/upload/${fileName}`;
+
+                         // 주의: attr('src', 'ingUrl') -> attr('src', imgUrl)
+                         const imgTag = $('<img>').attr('src', imgUrl).attr('alt', '게시글이미지');
+                         $('#img-container').append(imgTag);
+                     }
+                 },
+                 error : function(xhr,status,error){
+                     alert('게시글을 불러오는데 실패했습니다.');
+                     console.error('API Error : ',error);
+                 }
+             });
+         } else{
+             alert('유효하지 않은 게시글 ID입니다.');
+         }
+     });
+</script>
+</body>
+
+</html>

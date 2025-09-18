@@ -1,7 +1,7 @@
- function delete4Board(id){
+ function delete5Board(id){
         if(confirm(id + "번 게시물을 정말 삭제하시겠습니까?")){
         $.ajax({
-            url : '/delete4Board/' +id,
+            url : '/delete5Board/' +id,
             type : 'DELETE',
             success : function(result){
                 alert('성공적으로 삭제되었습니다.');

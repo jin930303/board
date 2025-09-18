@@ -1,8 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:insert="~{top:: top}"></div>
-<head>
-</head>
+<script th:src="@{/js/board4.js}"></script>
 <body>
 <a th:href="@{/inputBoard4}">글쓰기</a>
 <table>
@@ -28,7 +27,7 @@
         <td ><a th:href="@{detail4/{id}(id=${list.id})}" th:text="${list.title}"></a></td>
         <td th:text="${list.inputDate}"></td>
         <td th:text="${list.author}"></td>
-        <td><a th:href="@{update4/{id}(id=${list.id})}">수정</a>/<a href="#" th:onclick="delete4Board([[${list.id}]])">삭제</a></td>
+        <td><a th:href="@{update4/{id}(id=${list.id})}">수정</a>/<a href="#" th:onclick="|delete4Board([[${list.id}]])|">삭제</a></td>
     </tr>
     </tbody>
 </table>
