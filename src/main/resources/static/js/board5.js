@@ -1,5 +1,15 @@
- function delete5Board(id){
-        if(confirm(id + "번 게시물을 정말 삭제하시겠습니까?")){
+ function delete5BoardFromData(element){
+
+    const id = element.getAttribute('data-board-id');
+    const loginId = element.getAttribute('data-login-id');
+    const boardAuthor = element.getAttribute('data-board-author');
+
+
+    if(loginId!==boardAuthor){
+        alert('본인 게시물만 삭제 가능합니다.');
+        return false;
+    }
+    if(confirm(id + "번 게시물을 정말 삭제하시겠습니까?")){
         $.ajax({
             url : '/delete5Board/' +id,
             type : 'DELETE',

@@ -2,8 +2,10 @@ package com.example.board;
 
 import com.example.board.entity.Board2Entity;
 import com.example.board.entity.Board3Entity;
+import com.example.board.entity.Board5Entity;
 import com.example.board.repository.Board2Repository;
 import com.example.board.repository.Board3Repository;
+import com.example.board.repository.Board5Repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +22,9 @@ class BoardApplicationTests {
 
 	@Autowired
 	Board3Repository board3Repository;
+
+	@Autowired
+	Board5Repository board5Repository;
 
 	@Test
 	void insertData() {
@@ -50,6 +55,17 @@ class BoardApplicationTests {
 
 	}
 
+	@Test
+	void insertBoard5(){
+		for(int i = 0;i<=300;i++){
+			Board5Entity entity = new Board5Entity();
+			entity.setTitle(String.format("테스트 데이터[%03d]",i));
+			entity.setContent(String.format("내용[%03d]",i));
+			entity.setAuthor(String.format("작성자[%03d]",i));
+			entity.setInputDate(LocalDateTime.now());
 
+			this.board5Repository.save(entity);
+		}
+	}
 
 }

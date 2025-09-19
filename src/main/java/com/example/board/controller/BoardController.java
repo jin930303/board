@@ -6,6 +6,8 @@ import com.example.board.service.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -271,11 +273,27 @@ public class BoardController {
     }
     //board5 부분
     @GetMapping(value = "/board5")
-    public String board24(Model mo){
+    public String board24(Model mo, @PageableDefault(size = 10,sort = "id")Pageable pageable,
+                          @RequestParam(required = false)String kw ){
+        Page<Board5Entity> boardPage;
+//
+       if(kw !=null &&!kw.trim().isEmpty()){
+           boardPage= board5Service.searchBoardList(kw,pageable);
+       }
+       else{
+           boardPage=board5Service.findAll(pageable);
+       }
 
-        List<Board5Entity> list = board5Service.out();
-        mo.addAttribute("list",list);
+        int currentPage = boardPage.getNumber() + 1;
+        int pageSize = 5;
+        int currentBlock = (currentPage - 1) / pageSize;
+        int startPage = (currentBlock * pageSize) + 1;
+        int endPage = Math.min(startPage + pageSize - 1, boardPage.getTotalPages());
 
+        mo.addAttribute("boardPage",boardPage);
+        mo.addAttribute("startPage",startPage);
+        mo.addAttribute("endPage",endPage);
+        mo.addAttribute("kw",kw);
         return "board5";
     }
 

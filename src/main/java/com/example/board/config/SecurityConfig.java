@@ -34,10 +34,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/images/**","/checkNickname", "/checkId", "/checkEmail", "/memberSave").permitAll()
-                        .requestMatchers("/login", "/join", "/board1/**", "/board2/**", "/board3/**", "/").permitAll()
-                        .requestMatchers("/boardSave", "/inputBoard", "/updateBoard", "/updateSave").permitAll()
-                        .requestMatchers("inputBoard2", "/boardSave2", "/detail/{id}","/board5/**").permitAll()
-                        .requestMatchers("/board4/**","update4/{id}","/boardSave4","/delete4Board/{id}","update5Board/{id}","/delete5Board/{id}").authenticated()
+                        .requestMatchers( "/","/login", "/join", "/board1/**", "/board2/**", "/board3/**","/board4/**").permitAll()
+                        .requestMatchers( "/boardSave2", "/detail/{id}","/board5/**").permitAll()
+                        .requestMatchers("update4/{id}","/boardSave4","/delete4Board/{id}","update5Board/{id}",
+                                "/delete5Board/{id}","/boardSave" ).authenticated()
+                        .requestMatchers("/inputBoard","/inputBoard2","/inputBoard3","inputBoard4").authenticated()
+                        .requestMatchers( "/updateBoard", "/updateSave").authenticated()
                         .anyRequest().authenticated()
                 )
 

@@ -8,6 +8,9 @@ import com.example.board.repository.LikesLogRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -178,6 +181,36 @@ public class Board5ServiceImpl implements Board5Service {
         board.setLikes(board.getLikes()+1);
 
         return board.getLikes();
+    }
+
+    @Override
+    public Page<Board5Entity> findAll(Pageable pageable) {
+
+        int page = pageable.getPageNumber() +1 ;
+        int size = pageable.getPageSize();
+        int startRow = (page -1) * size +1 ;
+        int endRow = startRow +size -1 ;
+
+        List<Board5Entity> boards = board5Repository.findByPagination(startRow,endRow);
+
+        long totalCount = board5Repository.countBoards();
+
+
+        return new PageImpl<>(boards,pageable,totalCount);
+    }
+
+    @Override
+    public Page<Board5Entity> searchBoardList(String kw, Pageable pageable) {
+
+        int page = pageable.getPageNumber();
+        int size = pageable.getPageSize();
+        int startRow = page * size +1 ;
+        int endRow = startRow * size -1 ;
+
+        List<Board5Entity> boards = board5Repository.findByPageAndKeyWord(startRow,endRow,kw);
+        long totalCount = board5Repository.countSearchBoards(kw);
+
+        return new PageImpl<>(boards,pageable,totalCount);
     }
 
 
