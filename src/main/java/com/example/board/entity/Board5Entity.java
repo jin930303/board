@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Board5Entity {
 
     @Id
-    @Column
+    @Column(name = "board_id")
     @GeneratedValue(generator = "board5_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
 
