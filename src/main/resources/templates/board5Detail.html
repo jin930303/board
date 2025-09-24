@@ -1,4 +1,4 @@
-<html xmlns:th="http://www.thymeleaf.org"xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="">
 <div th:insert="~{top:: top}"></div>
 <link rel="stylesheet" type="text/css" th:href="@{/css/board2DetailView.css}">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -14,60 +14,140 @@
     <div id="img-container"></div>
     <button id="like-button">좋아요</button>
 </div>
+<div id="comment-list-container">
+
+</div>
+<div class="comment-form-container">
+    <form id="comment-form">
+        <input type="hidden" name="boardId" th:value="${id}">
+        <input type="text" id="comment-input" placeholder="댓글" required>
+        <button type="submit">등록</button>
+    </form>
+</div>
 <script th:inline="javascript">
     const boardId = [[${id}]];
 
-     $(document).ready(function(){
-         if(boardId){
-             $.ajax({
-                 // 주의: URL 경로에 자바스크립트 변수를 사용해야 함.
-                 // Thymeleaf 변수가 아닌 boardId 변수를 사용
-                 url: '/api/detail5Board/' + boardId,
-                 method: 'GET',
-                 success:function(data){
-                     $('#board-title').text(data.title);
-                     $('#board-content').text(data.content);
-                     $('#board-inputDate').text(data.inputDate);
-                     $('#board-author').text(data.author);
-                     $('#board-likes').text(data.likes);
-                     $('#board-views').text(data.views);
-
-                     if(data.filePath){
-                         const lastSlashIndex = data.filePath.lastIndexOf('\\');
-                         const fileName = data.filePath.substring(lastSlashIndex + 1);
-
-                         // 주의: 백틱(``)을 사용하여 변수 삽입
-                         const imgUrl = `/upload/${fileName}`;
-
-                         // 주의: attr('src', 'ingUrl') -> attr('src', imgUrl)
-                         const imgTag = $('<img>').attr('src', imgUrl).attr('alt', '게시글이미지');
-                         $('#img-container').append(imgTag);
-                     }
-                 },
-                 error : function(xhr,status,error){
-                     alert('게시글을 불러오는데 실패했습니다.');
-                     console.error('API Error : ',error);
-                 }
-             });
-         } else{
+     // ⭐ 두 개의 $(document).ready를 하나로 통합
+     $(document).ready(function() {
+         if (!boardId) {
              alert('유효하지 않은 게시글 ID입니다.');
+             return;
          }
+
+         // 1. 게시글 상세 정보 불러오기
+         $.ajax({
+             url: `/api/detail5Board/${boardId}`,
+             method: 'GET',
+             success: function(data) {
+                 $('#board-title').text(data.title);
+                 $('#board-content').text(data.content);
+                 $('#board-inputDate').text(data.inputDate);
+                 $('#board-author').text(data.author);
+                 $('#board-likes').text(data.likes);
+                 $('#board-views').text(data.views);
+
+                 if (data.filePath) {
+                     const lastSlashIndex = data.filePath.lastIndexOf('\\');
+                     const fileName = data.filePath.substring(lastSlashIndex + 1);
+                     const imgUrl = `/upload/${fileName}`;
+                     const imgTag = $('<img>').attr('src', imgUrl).attr('alt', '게시글이미지');
+                     $('#img-container').append(imgTag);
+                 }
+             },
+             error: function(xhr, status, error) {
+                 alert('게시글을 불러오는 데 실패했습니다.');
+                 console.error('API Error:', error);
+             }
+         });
+
+         // 2. 댓글 목록 불러오기 (페이지 로딩 시)
+         loadComments(boardId);
      });
 
-    $('#like-button').on('click', function(){
-        $.ajax({
-            url : `/api/board5/like/${boardId}`,
-            method : 'POST',
-            success : function(updateLikes){
-                alert('게시글을 추천하였습니다.');
-                $('#board-likes').text(updatedLikes);
-            },
-            error : function(xhr,status,error){
-                alert(xhr.responseText);
-            }
-        });
-    });
+     // 좋아요 버튼 클릭 이벤트
+     $('#like-button').on('click', function() {
+         $.ajax({
+             url: `/api/board5/like/${boardId}`,
+             method: 'POST',
+             success: function(updatedLikes) {
+                 alert('게시글을 추천하였습니다.');
+                 $('#board-likes').text(updatedLikes);
+             },
+             error: function(xhr, status, error) {
+                 alert(xhr.responseText);
+             }
+         });
+     });
+
+     // 댓글 목록을 가져와서 화면에 표시하는 함수
+     function loadComments(id) {
+         $.ajax({
+             url: `/api/comments/${id}`,
+             method: 'GET',
+             success: function(comments) {
+                 const container = $('#comment-list-container');
+                 container.empty(); // ⭐ 기존 댓글 삭제
+
+                 if (comments.length === 0) {
+                     container.append('<p>첫 번째 댓글을 남겨보세요!</p>');
+                 } else {
+                     comments.forEach(function(comment) {
+                         const commentHtml = `
+                              <div class="comment-item">
+                                    <div class="comment-header">
+                                        <span class="comment-author">${comment.authorNickname}</span>
+                                        <span class="comment-time">${comment.createTime}</span>
+                                        <button class="delete-button" data-comment-id="${comment.id}">❌</button>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p>${comment.content}</p>
+                                    </div>
+                              </div>
+                         `;
+                         container.append(commentHtml);
+                     });
+                 }
+             },
+             error: function(xhr, status, error) {
+                 console.error('댓글을 불러오는 데 실패했습니다.', error);
+             }
+         });
+     }
+
+     // 댓글 작성 폼 제출 이벤트
+     $('#comment-form').on('submit', function(e) {
+         e.preventDefault();
+
+         const commentContent = $('#comment-input').val();
+
+         if (commentContent.trim() === '') {
+             alert('댓글 내용을 입력해주세요');
+             return;
+         }
+         const commentData = {
+             content: commentContent,
+             boardId: boardId
+         };
+
+         $.ajax({
+             url: `/api/comments`,
+             method: 'POST',
+             contentType: 'application/json',
+             data: JSON.stringify(commentData),
+             success: function(response) {
+                 alert('댓글이 등록되었습니다.');
+                 $('#comment-input').val('');
+                 loadComments(boardId); // 댓글 등록 후 목록 새로고침
+             },
+             error: function(xhr, status, error) {
+                 const errorMessage = xhr.responseText || '알 수 없는 오류가 발생했습니다.';
+                 alert('댓글 등록에 실패했습니다.');
+                 console.error('Comment API Error:', error);
+             }
+         });
+     });
 </script>
+
 </body>
 
 </html>
