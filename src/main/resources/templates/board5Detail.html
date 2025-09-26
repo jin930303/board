@@ -66,6 +66,7 @@
 
      // 좋아요 버튼 클릭 이벤트
      $('#like-button').on('click', function() {
+
          $.ajax({
              url: `/api/board5/like/${boardId}`,
              method: 'POST',
@@ -74,7 +75,16 @@
                  $('#board-likes').text(updatedLikes);
              },
              error: function(xhr, status, error) {
-                 alert(xhr.responseText);
+                if(xhr.status === 401){
+                    const confirmLogin =confirm(xhr.responseText + '\n로그인 페이지로 이동하시겠습니까?');
+                    if(confirmLogin){
+                    window.location.href='/login';
+                    }
+                }
+                else{
+                    alert('좋아요 처리에 실패했습니다. 다시 시도해주세요.');
+                console.error('Like API Error:', xhr.responseText);
+                }
              }
          });
      });
@@ -141,8 +151,9 @@
              },
              error: function(xhr, status, error) {
                  const errorMessage = xhr.responseText || '알 수 없는 오류가 발생했습니다.';
-                 alert('댓글 등록에 실패했습니다.');
+                 alert('로그인 후 이용해주세요.');
                  console.error('Comment API Error:', error);
+                 window.location.href='/login';
              }
          });
      });
