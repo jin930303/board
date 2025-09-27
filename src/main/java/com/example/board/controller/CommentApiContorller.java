@@ -7,6 +7,8 @@ import com.example.board.entity.MemberEntity;
 import com.example.board.repository.Board5Repository;
 import com.example.board.repository.CommentRepository;
 import com.example.board.repository.MemberRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,6 +38,7 @@ public class CommentApiContorller {
 
         List<CommentDTO> dtos = comments.stream().map(comment ->{
             CommentDTO dto = new CommentDTO();
+            dto.setId(comment.getId());
             dto.setContent(comment.getContent());
             dto.setAuthorNickname(comment.getAuthor().getNickname());
             dto.setCreateTime(comment.getCreateTime());
@@ -68,5 +72,45 @@ public class CommentApiContorller {
 
         return ResponseEntity.ok(responseDTO);
 
+    }
+    @Transactional
+    @PutMapping(value = "/{commentId}")
+    public ResponseEntity<CommentDTO>updateComment(@PathVariable("commentId")Long commentId,
+                                                   @RequestBody CommentDTO commentDTO){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        BoardCommentEntity comment =commentRepository.findById(commentId)
+                .orElseThrow(()-> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+        if(!comment.getAuthor().getUsername().equals(currentUsername)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        comment.setContent(commentDTO.getContent());
+        BoardCommentEntity updatedComment = commentRepository.save(comment);
+
+        CommentDTO dto = new CommentDTO();
+        dto.setContent(updatedComment.getContent());
+        dto.setAuthorNickname(updatedComment.getAuthor().getNickname());
+        dto.setCreateTime(updatedComment.getCreateTime());
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping(value = "/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable("commentId")Long commentId){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+
+        BoardCommentEntity comment =commentRepository.findById(commentId)
+                .orElseThrow(()-> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+        if(!comment.getAuthor().getUsername().equals(currentUsername)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        commentRepository.delete(comment);
+
+        return ResponseEntity.ok().build();
     }
 }

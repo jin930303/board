@@ -103,16 +103,27 @@
                  } else {
                      comments.forEach(function(comment) {
                          const commentHtml = `
-                              <div class="comment-item">
-                                    <div class="comment-header">
-                                        <span class="comment-author">${comment.authorNickname}</span>
-                                        <span class="comment-time">${comment.createTime}</span>
-                                        <button class="delete-button" data-comment-id="${comment.id}">❌</button>
-                                    </div>
-                                    <div class="comment-content">
-                                        <p>${comment.content}</p>
-                                    </div>
-                              </div>
+                              <div class="comment-item" data-comment-id="${comment.id}">
+                                   <div class="comment-header">
+                                       <span class="comment-author">${comment.authorNickname}</span>
+                                       <span class="comment-time">${comment.createTime}</span>
+                                       <div class="comment-actions">
+
+                                       <button class="edit-btn" data-comment-id="${comment.id}">수정</button>
+
+                                       <button class="delete-btn" data-comment-id="${comment.id}">삭제</button>
+                                       </div>
+                                   </div>
+                                   <div class="comment-content">
+                                       <p class="comment-text">${comment.content}</p>
+                                       <div class="edit-form-container" style="display:none;">
+
+                                       <textarea class="edit-textarea">${comment.content}</textarea>
+                                       <button class="save-btn" data-comment-id="${comment.id}">저장</button>
+                                       <button class="cancel-btn">취소</button>
+                                       </div>
+                                   </div>
+                             </div>
                          `;
                          container.append(commentHtml);
                      });
@@ -157,6 +168,76 @@
              }
          });
      });
+
+    $(document).on('click','.edit-btn',function(){
+        const $item = $(this).closest('.comment-item');
+        $item.find('.comment-text').hide();
+        $item.find('.edit-form-container').show();
+        $item.find('.comment-actions').hide();
+    });
+
+    $(document).on('click','.cancel-btn',function(){
+        const $item = $(this).closest('.comment-item');
+        $item.find('.comment-text').show();
+        $item.find('.edit-form-container').hide();
+        $item.find('.comment-actions').show();
+    });
+
+    $(document).on('click','.save-btn',function(){
+        const commentId = $(this).data('comment-id');
+        const $item = $(this).closest('.comment-item');
+        const newContent = $item.find('.edit-textarea').val().trim();
+
+        if(newContent === ''){
+            alert('수정할 내용을 입력해주세요.');
+            return;
+        }
+        const updateData = {
+            content : newContent
+        };
+
+        $.ajax({
+            url : `/api/comments/${commentId}`,
+            method : 'PUT',
+            contentType : 'application/json',
+            data : JSON.stringify(updateData),
+            success : function(response){
+                alert('댓글이 수정되었습니다.');
+                $item.find('.comment-text').text(response.content).show();
+                $item.find('.edit-form-container').hide();
+                $item.find('.edit-textarea').val(response.content);
+                $item.find('.comment-actions').show();
+            },
+            error : function(xhr,status,error){
+                alert('댓글 수정에 실패했습니다. 권한을 확인해주세요.');
+                console.error("PUT API error :",error);
+            }
+        });
+    });
+
+    $(document).on('click','.delete-btn',function(){
+        const commentId = $(this).data('comment-id');
+
+        if(confirm('정말로 댓글을 삭제 하시겠습니까?')){
+            $.ajax({
+                url : `/api/comments/${commentId}`,
+                method : 'DELETE',
+                success : function(response){
+                    alert('댓글이 삭제되었습니다.');
+                    loadComments(boardId);
+                },
+                error : function(xhr,status,error){
+                     if (xhr.status === 403 || xhr.status === 401) {
+                    alert('삭제 권한이 없거나 로그인이 필요합니다.');
+                } else {
+                    alert('댓글 삭제에 실패했습니다.');
+                }
+                console.error('Delete API Error:', xhr.responseText);
+                }
+            });
+        }
+    });
+
 </script>
 
 </body>
