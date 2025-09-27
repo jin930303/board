@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("update4/{id}", "/boardSave4", "/delete4Board/{id}", "update5Board/{id}",
                                 "/delete5Board/{id}", "/boardSave").authenticated()
                         .requestMatchers("/inputBoard", "/inputBoard2", "/inputBoard3", "inputBoard4", "/api/board5/like/{boardId}").authenticated()
-                        .requestMatchers("/updateBoard", "/updateSave").authenticated()
+                        .requestMatchers("/updateBoard", "/updateSave","/api/comments/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(handling -> handling
