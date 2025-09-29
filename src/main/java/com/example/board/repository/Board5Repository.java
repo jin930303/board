@@ -11,16 +11,24 @@ import java.util.List;
 
 public interface Board5Repository extends JpaRepository<Board5Entity, Long> {
 
-    @Query(value = "select * from (select rownum as rn, b.* from board5 b order by b.board_id desc)" +
-            " where rn between :startRow and :endRow", nativeQuery = true)
+    @Query(value = "SELECT * FROM ("
+            + "  SELECT ROWNUM AS rn, ordered_board.* FROM ("
+            + "    SELECT b.* FROM board5 b ORDER BY b.board_id DESC"
+            + "  ) ordered_board"
+            + ") WHERE rn BETWEEN :startRow AND :endRow", nativeQuery = true)
     List<Board5Entity> findByPagination(@Param("startRow") int startRow, @Param("endRow") int endRow);
 
     @Query(value = "select count(*) from board5", nativeQuery = true)
     long countBoards();
 
-    @Query(value = "select * from (select rownum as rn, b.* from board5 b where b.title like %:kw% or " +
-            "b.content like %:kw% order by b.board_id desc)" +
-            "where rn between :startRow and :endRow",nativeQuery = true)
+    @Query(value = "SELECT * FROM ("
+            + "  SELECT ROWNUM AS rn, final_ordered_result.* FROM ("
+            + "    SELECT filtered_board.* FROM ("
+            + "      SELECT b.* FROM board5 b WHERE b.title LIKE %:kw% OR b.content LIKE %:kw%"
+            + "    ) filtered_board"
+            + "    ORDER BY filtered_board.board_id DESC" // 최종 정렬
+            + "  ) final_ordered_result"
+            + ") WHERE rn BETWEEN :startRow AND :endRow",nativeQuery = true)
     List<Board5Entity> findByPageAndKeyWord(@Param("startRow") int startRow, int endRow, String kw);
 
     @Query(value = "select count(*) from board5 where title like %:kw% or content like %:kw%",nativeQuery = true)

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.time.LocalDateTime;
@@ -306,11 +307,20 @@ public class BoardController {
     }
 
     @PostMapping(value = "/boardSave5")
-    public String board26(Board5DTO board5DTO, @AuthenticationPrincipal UserDetails userDetails) {
-        String author = userDetails.getUsername();
-        board5DTO.setAuthor(author);
-        board5Service.save(board5DTO);
+    public String board26(Board5DTO board5DTO,
+                          @AuthenticationPrincipal Object principal,
+                          RedirectAttributes rttr) {
+        String authorNickname = extractAuthor(principal);
 
+        // 2. 로그인 상태 확인
+        if (authorNickname == null || authorNickname.isEmpty()) {
+            rttr.addFlashAttribute("error", "로그인 후 이용해주세요.");
+            return "redirect:/login";
+        }
+
+        board5DTO.setAuthor(authorNickname);
+        board5Service.save(board5DTO);
+        rttr.addFlashAttribute("message", "게시글이 등록되었습니다.");
         return "redirect:/board5";
     }
 
@@ -336,5 +346,23 @@ public class BoardController {
         mo.addAttribute("id", id);
         return "board5Detail";
     }
+    private String extractAuthor(Object principal) {
+        if (principal == null) {
+            return null;
+        }
 
+        // 소셜 로그인 (DefaultOAuth2User) 처리
+        if (principal instanceof org.springframework.security.oauth2.core.user.DefaultOAuth2User) {
+            // CustomOAuth2UserService에서 DB 닉네임을 설정한 'name' 속성을 사용합니다.
+            return ((org.springframework.security.oauth2.core.user.DefaultOAuth2User) principal).getAttribute("name");
+        }
+
+        // 일반 로그인 (UserDetails) 처리
+        if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+            // 일반 로그인 시 getUsername()이 닉네임 역할을 한다고 가정
+            return ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+        }
+
+        return null;
+    }
 }
